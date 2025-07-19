@@ -2,9 +2,11 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import SplashScreen from './screens/SplashScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
-import SetupScreen from './screens/SetupScreen'; // create this screen later
-// import HomeScreen from './screens/HomeScreen'; // optional
+import SetupBot from './screens/SetupBot';
+import SetupScreen from './screens/SetupScreen';
+import SuccessScreen from './screens/SuccessScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,14 +14,17 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Welcome"
+        initialRouteName="Splash"
         screenOptions={{
-          headerShown: false, // hides header for clean look
+          headerShown: false, 
         }}
       >
+        <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="SetupBot" component={SetupBot} />
         <Stack.Screen name="Setup" component={SetupScreen} />
-        {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
+        <Stack.Screen name="Success" component={SuccessScreen} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
