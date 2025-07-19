@@ -21,7 +21,7 @@ const WelcomeScreen = () => {
         Plan your week and get daily reminders on Telegram.
       </Text>
       <Text style={styles.subtitle}>
-        Made With ❤️ by Muffakir Hamid
+        Made With  by Muffakir Ibn   Hamid
       </Text>
         <Text style={styles.subtitle}>
             Sponsored by <Text style={{color: '#FF0000', fontWeight : 'bold'}}>HackClub</Text> and <Text style={{color: '#0088cc', fontWeight : 'bold'}}>Gemini</Text>
