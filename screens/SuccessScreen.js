@@ -67,11 +67,11 @@ const SuccessScreen = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header Section */}
       <Animated.Text style={[styles.title, { opacity: fadeAnim }]}>
-        Connection Successful
+        Check for a telegram message
       </Animated.Text>
 
       <Animated.Text style={[styles.subtitle, { opacity: fadeAnim }]}>
-        Your WeekGram bot is now linked with your Telegram account.
+        If you got a telegram message saying your bot is connected succesfully, then you're a champ! You did it.
       </Animated.Text>
 
      
@@ -106,9 +106,9 @@ const SuccessScreen = () => {
       {/* Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Welcome')}
+        onPress={() => navigation.navigate('Home')}
       >
-        <Text style={styles.buttonText}>Back to Home</Text>
+        <Text style={styles.buttonText}>Go to Home</Text>
       </TouchableOpacity>
 
       {/* Divider */}
@@ -123,13 +123,7 @@ const SuccessScreen = () => {
         <Text style={styles.tip}> Mute unnecessary chats during work hours.</Text>
       </View>
 
-      {/* Footer Section */}
-      <Text style={styles.sectionTitle}>Follow Us</Text>
-      <View style={styles.footerLinks}>
-        <Text style={styles.link}>weekgram.app</Text>
-        <Text style={styles.link}>support@weekgram.app</Text>
-        <Text style={styles.link}>t.me/weekgram_bot</Text>
-      </View>
+      
 
       {/* Bottom CTA */}
       <TouchableOpacity style={styles.feedbackButton}>

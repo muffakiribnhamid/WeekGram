@@ -1,19 +1,30 @@
-import React from 'react';
-import { Image } from 'react-native';
-import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { useEffect } from 'react';
+import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 const WelcomeScreen = () => {
   const navigation = useNavigation();
 
-  const handleGetStarted = () => {
-    navigation.navigate('Setup'); 
+  useEffect(() => {
+    const checkVisited = async () => {
+      const hasVisited = await AsyncStorage.getItem('hasVisited');
+      if (hasVisited === 'true') {
+        navigation.replace('Home'); 
+      }
+    };
+    checkVisited();
+  }, []);
+
+  const handleGetStarted = async () => {
+    await AsyncStorage.setItem('hasVisited', 'true');
+    navigation.navigate('Setup');
   };
 
   return (
     <View style={styles.container}>
       <Image
-        source={require('../assets/logo.png')} 
+        source={require('../assets/logo.png')}
         style={{ width: '100%', height: 200, marginBottom: 20 }}
       />
       <Text style={styles.title}>Welcome to WeekGram! </Text>
@@ -21,11 +32,12 @@ const WelcomeScreen = () => {
         Plan your week and get daily reminders on Telegram.
       </Text>
       <Text style={styles.subtitle}>
-        Made With  by Muffakir Ibn   Hamid
+        Made With ❤️ by Muffakir Ibn Hamid
       </Text>
-        <Text style={styles.subtitle}>
-            Sponsored by <Text style={{color: '#FF0000', fontWeight : 'bold'}}>HackClub</Text> and <Text style={{color: '#0088cc', fontWeight : 'bold'}}>Gemini</Text>
-        </Text>
+      <Text style={styles.subtitle}>
+        Sponsored by <Text style={{ color: '#FF0000', fontWeight: 'bold' }}>HackClub</Text> and{' '}
+        <Text style={{ color: '#0088cc', fontWeight: 'bold' }}>Gemini</Text>
+      </Text>
       <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
         <Text style={styles.buttonText}>Get Started</Text>
       </TouchableOpacity>
@@ -54,10 +66,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#34495E',
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 10,
   },
   button: {
-    backgroundColor: '#1DA1F2', // Twitter/Telegram blue
+    marginTop: 40,
+    backgroundColor: '#1DA1F2',
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 10,
