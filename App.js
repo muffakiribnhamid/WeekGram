@@ -8,10 +8,16 @@ import SetupBot from './screens/SetupBot';
 import SetupScreen from './screens/SetupScreen';
 import SuccessScreen from './screens/SuccessScreen';
 import HomeScreen from './screens/HomeScreen';
+import { useEffect } from 'react';
+import { registerTaskScheduler } from './services/SchedulerService';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  useEffect(() => {
+    registerTaskScheduler();
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -29,4 +35,4 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}  
+}

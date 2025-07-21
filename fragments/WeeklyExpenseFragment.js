@@ -14,6 +14,9 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+import { sendTelegramMessage } from '../services/telegramService';
+import { getUser } from '../services/storageService';
+
 const WeeklyExpenseFragment = () => {
   const [expenses, setExpenses] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -63,38 +66,33 @@ const WeeklyExpenseFragment = () => {
   };
 
   const sendWeeklyExpenseToTelegram = async () => {
-    const user = await AsyncStorage.getItem('weekgram_user');
-    if (!user) return Alert.alert('No Telegram ID found');
-    const { telegramId } = JSON.parse(user);
+    try {
+      const user = await getUser();
+      if (!user || !user.telegramId) return Alert.alert('No Telegram ID found');
+      const telegramId = user.telegramId;
 
-    const currentWeekExpenses = expenses.filter((e) => {
-      const now = new Date();
-      const expenseDate = new Date(e.date);
-      const diffDays = (now - expenseDate) / (1000 * 60 * 60 * 24);
-      return diffDays <= 7;
-    });
+      const currentWeekExpenses = expenses.filter((e) => {
+        const now = new Date();
+        const expenseDate = new Date(e.date);
+        const diffDays = (now - expenseDate) / (1000 * 60 * 60 * 24);
+        return diffDays <= 7;
+      });
 
-    const total = currentWeekExpenses.reduce((sum, e) => sum + e.price, 0);
-    const message = `📟 *Weekly Expense Summary*\n\n${currentWeekExpenses
-      .map(
-        (e, i) =>
-          `${i + 1}. ${e.title} - ₹${e.price} on ${e.date} (${e.mode})`
-      )
-      .join('\n')}\n\n*Total:* ₹${total}`;
+      const total = currentWeekExpenses.reduce((sum, e) => sum + e.price, 0);
+      const message = `📟 *Weekly Expense Summary*\n\n${currentWeekExpenses
+        .map(
+          (e, i) =>
+            `${i + 1}. ${e.title} - ₹${e.price} on ${e.date} (${e.mode})`
+        )
+        .join('\n')}\n\n*Total:* ₹${total}`;
 
-    fetch(`https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: telegramId,
-        text: message,
-        parse_mode: 'Markdown',
-      }),
-    })
-      .then((res) => res.json())
-      .then(() => Alert.alert('Summary sent to Telegram!'))
-      .catch(() => Alert.alert('Error sending to Telegram'));
+      await sendTelegramMessage(telegramId, message);
+      Alert.alert('Summary sent to Telegram!');
+    } catch (error) {
+      Alert.alert('Error sending to Telegram');
+    }
   };
+
 
   return (
     <SafeAreaView style={styles.safeContainer}>

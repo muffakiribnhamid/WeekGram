@@ -1,62 +1,94 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   FlatList,
+  Modal,
   StyleSheet,
+  ScrollView,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 
 const STORAGE_KEY = '@weekgram_tasks';
 
-const HomeFragment = () => {
-  const [task, setTask] = useState('');
-  const [tasks, setTasks] = useState([]);
+const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-  // Load tasks on mount
+const HomeFragment = () => {
+  const [tasks, setTasks] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
+  const [estTime, setEstTime] = useState('');
+  const [reminders, setReminders] = useState([]);
+  const [everyDay, setEveryDay] = useState(false);
+
   useEffect(() => {
     loadTasks();
   }, []);
 
-  // Save tasks whenever updated
-  useEffect(() => {
-    saveTasks(tasks);
-  }, [tasks]);
-
   const loadTasks = async () => {
-    try {
-      const stored = await AsyncStorage.getItem(STORAGE_KEY);
-      if (stored) setTasks(JSON.parse(stored));
-    } catch (err) {
-      console.error('Error loading tasks:', err);
-    }
+    const stored = await AsyncStorage.getItem(STORAGE_KEY);
+    if (stored) setTasks(JSON.parse(stored));
   };
 
   const saveTasks = async (newTasks) => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newTasks));
-    } catch (err) {
-      console.error('Error saving tasks:', err);
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newTasks));
+  };
+
+  const toggleReminderDay = (day) => {
+    if (reminders.includes(day)) {
+      setReminders(reminders.filter((d) => d !== day));
+    } else {
+      setReminders([...reminders, day]);
     }
   };
 
   const addTask = () => {
-    if (!task.trim()) return;
-    const newTask = { id: Date.now().toString(), text: task };
-    setTasks([newTask, ...tasks]);
-    setTask('');
+    if (!title.trim() || !desc.trim() || !estTime.trim()) {
+      Alert.alert('Please fill all fields');
+      return;
+    }
+
+    const newTask = {
+      id: Date.now().toString(),
+      title,
+      description: desc,
+      estTime,
+      remindDays: everyDay ? [...daysOfWeek] : reminders,
+    };
+
+    const updated = [newTask, ...tasks];
+    setTasks(updated);
+    saveTasks(updated);
+    setModalVisible(false);
+    resetForm();
   };
 
   const deleteTask = (id) => {
-    setTasks(tasks.filter((t) => t.id !== id));
+    const updated = tasks.filter((t) => t.id !== id);
+    setTasks(updated);
+    saveTasks(updated);
+  };
+
+  const resetForm = () => {
+    setTitle('');
+    setDesc('');
+    setEstTime('');
+    setReminders([]);
+    setEveryDay(false);
   };
 
   const renderItem = ({ item }) => (
     <View style={styles.taskItem}>
-      <Text style={styles.taskText}>{item.text}</Text>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.taskTitle}>{item.title}</Text>
+        <Text style={styles.taskDesc}>{item.description}</Text>
+        <Text style={styles.taskMeta}>⏱ {item.estTime} mins | 🔔 {item.remindDays.join(', ')}</Text>
+      </View>
       <TouchableOpacity onPress={() => deleteTask(item.id)}>
         <Ionicons name="trash-outline" size={20} color="#EA2027" />
       </TouchableOpacity>
@@ -67,28 +99,85 @@ const HomeFragment = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Your Weekly Tasks</Text>
 
-      <View style={styles.inputRow}>
-        <TextInput
-          style={styles.input}
-          placeholder="Add a task..."
-          value={task}
-          onChangeText={setTask}
-          onSubmitEditing={addTask}
-        />
-        <TouchableOpacity onPress={addTask} style={styles.addButton}>
-          <Ionicons name="add-circle-outline" size={28} color="#10AC84" />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.addButtonBar} onPress={() => setModalVisible(true)}>
+        <Ionicons name="add-circle-outline" size={26} color="#10AC84" />
+        <Text style={styles.addButtonText}>Add Task</Text>
+      </TouchableOpacity>
 
       <FlatList
         data={tasks}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 80 }}
-        ListEmptyComponent={
-          <Text style={styles.empty}>No tasks added yet.</Text>
-        }
+        ListEmptyComponent={<Text style={styles.empty}>No tasks added yet.</Text>}
+        contentContainerStyle={{ paddingBottom: 100 }}
       />
+
+      <Modal visible={modalVisible} animationType="slide" transparent>
+        <View style={styles.modalContainer}>
+          <ScrollView style={styles.modalContent}>
+            <Text style={styles.modalTitle}>New Task</Text>
+
+            <TextInput
+              style={styles.input}
+              placeholder="Title"
+              value={title}
+              onChangeText={setTitle}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Description"
+              value={desc}
+              onChangeText={setDesc}
+              multiline
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Estimated time (in minutes)"
+              keyboardType="numeric"
+              value={estTime}
+              onChangeText={setEstTime}
+            />
+
+            <Text style={styles.label}>Remind on:</Text>
+            <View style={styles.daysContainer}>
+              {daysOfWeek.map((day) => (
+                <TouchableOpacity
+                  key={day}
+                  style={[
+                    styles.dayChip,
+                    reminders.includes(day) || everyDay ? styles.daySelected : null,
+                  ]}
+                  onPress={() => toggleReminderDay(day)}
+                  disabled={everyDay}
+                >
+                  <Text
+                    style={[
+                      styles.dayText,
+                      reminders.includes(day) || everyDay ? { color: '#fff' } : null,
+                    ]}
+                  >
+                    {day}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <TouchableOpacity onPress={() => setEveryDay(!everyDay)}>
+              <Text style={styles.everydayToggle}>
+                {everyDay ? '✅ Remind Every Day' : '☐ Remind Every Day'}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.saveBtn} onPress={addTask}>
+              <Text style={styles.saveBtnText}>Save Task</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <Text style={styles.cancelBtn}>Cancel</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -97,49 +186,123 @@ export default HomeFragment;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    paddingTop: 50, // below notch
     padding: 20,
-    paddingBottom: 80,
+    backgroundColor: '#f9f9f9',
   },
   title: {
     fontSize: 22,
     fontWeight: '600',
+    marginBottom: 14,
+    textAlign: 'center',
     color: '#2C3E50',
-    marginBottom: 16,
   },
-  inputRow: {
+  addButtonBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 14,
   },
-  input: {
-    flex: 1,
-    borderColor: '#dfe6e9',
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
+  addButtonText: {
     fontSize: 16,
-    backgroundColor: '#fff',
-  },
-  addButton: {
-    marginLeft: 10,
+    marginLeft: 8,
+    color: '#10AC84',
   },
   taskItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#f1f2f6',
-    padding: 14,
+    backgroundColor: '#ecf0f1',
     borderRadius: 10,
+    padding: 14,
+    flexDirection: 'row',
     marginBottom: 10,
   },
-  taskText: {
+  taskTitle: {
     fontSize: 16,
-    color: '#34495E',
-    flex: 1,
+    fontWeight: '600',
+    color: '#2d3436',
+  },
+  taskDesc: {
+    fontSize: 14,
+    color: '#636e72',
+  },
+  taskMeta: {
+    fontSize: 12,
+    color: '#b2bec3',
   },
   empty: {
     textAlign: 'center',
-    marginTop: 40,
     color: '#95a5a6',
-    fontSize: 16,
+    marginTop: 30,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#00000088',
+    justifyContent: 'center',
+  },
+  modalContent: {
+    margin: 24,
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 12,
+    maxHeight: '80%',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 14,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#dcdde1',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 12,
+    backgroundColor: '#fff',
+  },
+  label: {
+    fontWeight: '500',
+    marginBottom: 6,
+  },
+  daysContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 10,
+  },
+  dayChip: {
+    borderWidth: 1,
+    borderColor: '#10AC84',
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    margin: 4,
+  },
+  daySelected: {
+    backgroundColor: '#10AC84',
+  },
+  dayText: {
+    fontSize: 14,
+    color: '#10AC84',
+  },
+  everydayToggle: {
+    textAlign: 'center',
+    marginVertical: 10,
+    fontWeight: '500',
+    color: '#2d98da',
+  },
+  saveBtn: {
+    backgroundColor: '#10AC84',
+    padding: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  saveBtnText: {
+    color: '#fff',
+    fontWeight: '600',
+  },
+  cancelBtn: {
+    textAlign: 'center',
+    color: '#e74c3c',
+    marginTop: 10,
+    fontWeight: '500',
   },
 });

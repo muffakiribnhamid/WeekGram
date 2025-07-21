@@ -62,7 +62,7 @@ const SetupScreen = () => {
 
     if (!hasSentMessage && !isWaiting) {
       setIsWaiting(true);
-      const botToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // 🔁 Replace with your actual bot token
+      const botToken = '7717357241:AAFfWrUWxzMCf5v5tJIbsjNMeiD7ukHAics'; // 🔁 Replace with your actual bot token
       const message = `👋 Hello ${name}, your setup is almost done!`;
       const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${telegramId}&text=${encodeURIComponent(message)}`;
 
