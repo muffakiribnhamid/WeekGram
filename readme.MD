@@ -24,6 +24,12 @@
 - **DateTimePicker** for flexible date input
 
 ## Screenshots:
+![WeekGram Screenshot 1](https://hc-cdn.hel1.your-objectstorage.com/s/v3/3d636f1a2e29775442f52bfde8986790f650ff5a_weekgram1.jpeg)
+![WeekGram Screenshot 2](https://hc-cdn.hel1.your-objectstorage.com/s/v3/3bb57b9d0a988bf47e8c6df8ad7bd05eec6a2b7d_weekgram2.jpeg)
+![WeekGram Screenshot 3](https://hc-cdn.hel1.your-objectstorage.com/s/v3/e3f418550f49de27cff5d4cf1537be98037f5137_weekgram3.jpeg)
+![WeekGram Screenshot 4](https://hc-cdn.hel1.your-objectstorage.com/s/v3/3c25cfe309f1e110917102c0a66995d6c53bef6c_weekgram4.jpeg)
+![WeekGram Screenshot 5](https://hc-cdn.hel1.your-objectstorage.com/s/v3/7b291f67a18fa10eeba0e8166a7882ab31d595f9_weekgram5.jpeg)
+![WeekGram Screenshot 6](https://hc-cdn.hel1.your-objectstorage.com/s/v3/bc51ab792c0ee00e6b4742be0e795fcdc0f4182d_weekgram6.jpeg)
 
 
 
