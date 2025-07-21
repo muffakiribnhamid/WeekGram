@@ -1,4 +1,3 @@
-// services/schedulerService.js
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundTask from 'expo-background-task';
 import { getUser, getTasks } from './storageService';
@@ -6,7 +5,7 @@ import { sendTelegramMessage } from './telegramService';
 
 const TASK_NAME = 'SEND_DAILY_TELEGRAM_MESSAGE';
 
-// Define background task
+// Took help from AI (GPT 4o)
 TaskManager.defineTask(TASK_NAME, async () => {
   try {
     const user = await getUser();
@@ -27,13 +26,12 @@ TaskManager.defineTask(TASK_NAME, async () => {
   }
 });
 
-/**
- * Register daily task using expo-background-task
- */
+
+
 export const registerTaskScheduler = async () => {
   try {
     await BackgroundTask.registerTaskAsync(TASK_NAME, {
-      interval: 60 * 60 * 24, // 24 hours in seconds
+      interval: 60 * 60 * 24,
     });
     console.log('Daily Telegram message task registered');
   } catch (error) {

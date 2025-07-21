@@ -43,7 +43,7 @@ const AboutFragment = () => {
       >
         <Image
           source={{
-            uri: 'https://avatars.githubusercontent.com/u/97360825?v=4', // replace with actual
+            uri: 'https://avatars.githubusercontent.com/u/97360825?v=4', 
           }}
           style={styles.avatar}
         />

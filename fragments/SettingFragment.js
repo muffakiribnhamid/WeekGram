@@ -1,4 +1,3 @@
-// fragments/SettingsFragment.js
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -69,7 +68,6 @@ const SettingsFragment = () => {
       return;
     }
 
-    // Here you can integrate with your backend, for now just show alert
     Alert.alert('Thank you!', 'Your bug report has been submitted.');
     setBugReport('');
   };

@@ -19,7 +19,6 @@ const SuccessScreen = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading state
     const timer = setTimeout(() => {
       setLoading(false);
       startAnimations();
@@ -65,7 +64,6 @@ const SuccessScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Header Section */}
       <Animated.Text style={[styles.title, { opacity: fadeAnim }]}>
         Check for a telegram message
       </Animated.Text>
@@ -76,13 +74,11 @@ const SuccessScreen = () => {
 
      
 
-      {/* Progress Bar */}
       <Text style={styles.sectionTitle}>Progress</Text>
       <View style={styles.progressBarBackground}>
         <Animated.View style={[styles.progressBarFill, { width: progressWidth }]} />
       </View>
 
-      {/* Info Box */}
       <Text style={styles.sectionTitle}>What Happens Next</Text>
       <View style={styles.infoBox}>
         <Text style={styles.infoText}>
@@ -96,14 +92,12 @@ const SuccessScreen = () => {
         </Text>
       </View>
 
-      {/* Motivation Section */}
       <View style={styles.quoteContainer}>
         <Text style={styles.quote}>
           “Discipline is choosing between what you want now and what you want most.”
         </Text>
       </View>
 
-      {/* Button */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('Home')}
@@ -111,10 +105,8 @@ const SuccessScreen = () => {
         <Text style={styles.buttonText}>Go to Home</Text>
       </TouchableOpacity>
 
-      {/* Divider */}
       <View style={styles.divider} />
 
-      {/* Tips Section */}
       <Text style={styles.sectionTitle}>Tips to Maximize Productivity</Text>
       <View style={styles.tipsBox}>
         <Text style={styles.tip}> Keep your reminders short but actionable.</Text>
@@ -125,7 +117,6 @@ const SuccessScreen = () => {
 
       
 
-      {/* Bottom CTA */}
       <TouchableOpacity style={styles.feedbackButton}>
         <Text style={styles.feedbackText}>Leave Feedback</Text>
       </TouchableOpacity>
@@ -143,7 +134,7 @@ container: {
   alignItems: 'center',
   justifyContent: 'center',
   marginTop: 40,
-  marginBottom: 60, // <- Added for spacing at the bottom
+  marginBottom: 60, 
 },
   loadingContainer: {
     flex: 1,

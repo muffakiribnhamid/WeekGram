@@ -1,4 +1,3 @@
-// services/storageService.js
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const USER_KEY = 'weekgram_user';

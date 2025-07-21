@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+
+// got quotes from AI (SO AI USED PROLLY HERE)
 const quotes = [
   "Plan your week, own your time.",
   "Little planning leads to big peace.",
@@ -32,14 +34,12 @@ const SplashScreen = () => {
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     setQuote(randomQuote);
 
-    // Start fade-in animation
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 1500,
       useNativeDriver: true,
     }).start();
 
-    // Navigate to Welcome screen after 3 seconds
     const timer = setTimeout(() => {
       navigation.replace('Welcome');
     }, 3000);

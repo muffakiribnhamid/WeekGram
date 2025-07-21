@@ -1,7 +1,6 @@
-// services/telegramService.js
 import axios from 'axios';
 
-import { TELEGRAM_BOT_TOKEN } from '@env'; // Loaded from .env file
+import { TELEGRAM_BOT_TOKEN } from '@env'; 
 const TELEGRAM_API_BASE = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
 
 /**

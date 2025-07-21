@@ -12,6 +12,8 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
+import { TELEGRAM_BOT_TOKEN } from '@env';
+
 
 const SetupScreen = () => {
   const [telegramId, setTelegramId] = useState('');
@@ -62,9 +64,8 @@ const SetupScreen = () => {
 
     if (!hasSentMessage && !isWaiting) {
       setIsWaiting(true);
-      const botToken = '7717357241:AAFfWrUWxzMCf5v5tJIbsjNMeiD7ukHAics'; // 🔁 Replace with your actual bot token
       const message = `👋 Hello ${name}, your setup is almost done!`;
-      const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${telegramId}&text=${encodeURIComponent(message)}`;
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${telegramId}&text=${encodeURIComponent(message)}`;
 
       try {
         const response = await fetch(url);
