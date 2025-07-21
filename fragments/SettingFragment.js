@@ -132,21 +132,7 @@ const SettingsFragment = () => {
           <Text style={styles.reportButtonText}>Submit Bug Report</Text>
         </TouchableOpacity>
 
-        <Text style={styles.subHeader}>Quick Links</Text>
-        <View style={styles.links}>
-          <TouchableOpacity onPress={() => Linking.openURL('https://github.com/muffakir')}>
-            <Text style={styles.linkText}>GitHub</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL('https://linkedin.com/in/muffakir')}>
-            <Text style={styles.linkText}>LinkedIn</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL('https://x.com/muffakir')}>
-            <Text style={styles.linkText}>X (Twitter)</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL('https://dev.to/muffakir')}>
-            <Text style={styles.linkText}>Dev.to</Text>
-          </TouchableOpacity>
-        </View>
+      
       </ScrollView>
     </KeyboardAvoidingView>
   );

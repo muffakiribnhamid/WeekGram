@@ -16,22 +16,22 @@ const AboutFragment = () => {
     {
       name: 'GitHub',
       icon: <Ionicons name="logo-github" size={24} color="#fff" />,
-      url: 'https://github.com/muffakirhamid',
+      url: 'https://github.com/muffakiribnhamid',
     },
     {
       name: 'LinkedIn',
       icon: <Ionicons name="logo-linkedin" size={24} color="#fff" />,
-      url: 'https://linkedin.com/in/muffakirhamid',
+      url: 'https://www.linkedin.com/in/muffakir-ibn-hamid-414b2a244/',
     },
     {
       name: 'X',
       icon: <FontAwesome name="twitter" size={24} color="#fff" />,
-      url: 'https://x.com/muffakirhamid',
+      url: 'https://x.com/HamidMuffakir',
     },
     {
       name: 'Dev.to',
       icon: <Ionicons name="logo-codepen" size={24} color="#fff" />,
-      url: 'https://dev.to/muffakirhamid',
+      url: 'https://dev.to/muffakir_ibnhamid_338cde',
     },
   ];
 
@@ -43,7 +43,7 @@ const AboutFragment = () => {
       >
         <Image
           source={{
-            uri: 'https://avatars.githubusercontent.com/u/11111111?v=4', // replace with actual
+            uri: 'https://avatars.githubusercontent.com/u/97360825?v=4', // replace with actual
           }}
           style={styles.avatar}
         />

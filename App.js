@@ -17,7 +17,6 @@ export default function App() {
   useEffect(() => {
     registerTaskScheduler();
   }, []);
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -35,4 +34,4 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+}  

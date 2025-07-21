@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import { sendTelegramMessage } from '../services/telegramService';
+import { getUser } from '../services/storageService';
 
 const STORAGE_KEY = '@weekgram_tasks';
 
@@ -95,6 +97,27 @@ const HomeFragment = () => {
     </View>
   );
 
+  // Button handler to send today's tasks to Telegram
+  const sendTodayTasksToTelegram = async () => {
+    try {
+      const user = await getUser();
+      if (!user || !user.telegramId) return Alert.alert('No Telegram ID found');
+      const telegramId = user.telegramId;
+
+      // Get today's day string (e.g. 'Mon')
+      const today = daysOfWeek[new Date().getDay() - 1 < 0 ? 6 : new Date().getDay() - 1];
+      // Filter tasks for today
+      const todaysTasks = tasks.filter(task => task.remindDays.includes(today));
+      const message = todaysTasks.length
+        ? `*Your Tasks for ${today}:*\n` + todaysTasks.map((t, i) => `${i + 1}. ${t.title} (${t.description})`).join('\n')
+        : `No tasks scheduled for *${today}*`;
+      await sendTelegramMessage(telegramId, message);
+      Alert.alert('Tasks sent to Telegram!');
+    } catch (error) {
+      Alert.alert('Error sending to Telegram');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Weekly Tasks</Text>
@@ -102,6 +125,11 @@ const HomeFragment = () => {
       <TouchableOpacity style={styles.addButtonBar} onPress={() => setModalVisible(true)}>
         <Ionicons name="add-circle-outline" size={26} color="#10AC84" />
         <Text style={styles.addButtonText}>Add Task</Text>
+      </TouchableOpacity>
+
+      {/* Send to Telegram Button */}
+      <TouchableOpacity style={[styles.saveBtn, {marginBottom: 10}]} onPress={sendTodayTasksToTelegram}>
+        <Text style={styles.saveBtnText}>📤 Send Today's Tasks to Telegram</Text>
       </TouchableOpacity>
 
       <FlatList

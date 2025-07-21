@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import HomeFragment from '../fragments/HomeFragment';
 import WeeklyExpenseFragment from '../fragments/WeeklyExpenseFragment';
 import SettingFragment from '../fragments/SettingFragment';
+import AboutFragment from '../fragments/AboutFragment';
 
 
 
@@ -22,8 +23,9 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         {activeTab === 'home' && <HomeFragment />}
-        {activeTab === 'about' && <WeeklyExpenseFragment />}
+        {activeTab === 'expenses' && <WeeklyExpenseFragment />}
         {activeTab === 'settings' && <SettingFragment/>}
+        {activeTab === 'about' && <AboutFragment/>}
       </View>
 
       {/* Bottom Nav */}
@@ -42,14 +44,26 @@ const HomeScreen = () => {
 
         <TouchableOpacity
           style={styles.tabButton}
-          onPress={() => setActiveTab('about')}
+          onPress={() => setActiveTab('expenses')}
         >
           <Ionicons
             name="cash-outline"
             size={28}
+            color={activeTab === 'expenses' ? '#10AC84' : '#888'}
+          />
+          <Text style={[styles.tabLabel, activeTab === 'expenses' && styles.tabLabelActive]}>Expenses</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.tabButton}
+          onPress={() => setActiveTab('about')}
+        >
+          <Ionicons
+            name="information-circle-outline"
+            size={28}
             color={activeTab === 'about' ? '#10AC84' : '#888'}
           />
-          <Text style={[styles.tabLabel, activeTab === 'about' && styles.tabLabelActive]}>Expenses</Text>
+          <Text style={[styles.tabLabel, activeTab === 'about' && styles.tabLabelActive]}>About</Text>
         </TouchableOpacity>
 
         <TouchableOpacity

@@ -1,6 +1,6 @@
 // services/schedulerService.js
 import * as TaskManager from 'expo-task-manager';
-import * as BackgroundFetch from 'expo-background-fetch';
+import * as BackgroundTask from 'expo-background-task';
 import { getUser, getTasks } from './storageService';
 import { sendTelegramMessage } from './telegramService';
 
@@ -22,32 +22,20 @@ TaskManager.defineTask(TASK_NAME, async () => {
 
       await sendTelegramMessage(user.telegramId, message);
     }
-
-    return BackgroundFetch.Result.NewData;
   } catch (error) {
     console.error('Background task error:', error);
-    return BackgroundFetch.Result.Failed;
   }
 });
 
 /**
- * Register daily task
+ * Register daily task using expo-background-task
  */
 export const registerTaskScheduler = async () => {
   try {
-    const status = await BackgroundFetch.getStatusAsync();
-    if (status === BackgroundFetch.Status.Restricted || status === BackgroundFetch.Status.Denied) {
-      console.warn('Background fetch is disabled');
-      return;
-    }
-
-    await BackgroundFetch.registerTaskAsync(TASK_NAME, {
-      minimumInterval: 60 * 60 * 24, // 24 hours
-      stopOnTerminate: false,
-      startOnBoot: true,
+    await BackgroundTask.registerTaskAsync(TASK_NAME, {
+      interval: 60 * 60 * 24, // 24 hours in seconds
     });
-
-    console.log(' Daily Telegram message task registered');
+    console.log('Daily Telegram message task registered');
   } catch (error) {
     console.error('Failed to register background task:', error);
   }
